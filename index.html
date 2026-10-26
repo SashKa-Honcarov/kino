@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение в кино ✨</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        cinema: {
+                            dark: '#0B0D17',
+                            card: '#151929',
+                            accent: '#EC4899',
+                            purple: '#8B5CF6',
+                            glow: '#3B82F6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #070913;
+            color: #F3F4F6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Ambient glowing background blur elements */
+        .glow-bg {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glow-1 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, #ec4899 0%, rgba(236,72,153,0) 70%);
+            top: -50px;
+            left: -50px;
+        }
+
+        .glow-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #8b5cf6 0%, rgba(139,92,246,0) 70%);
+            bottom: -100px;
+            right: -100px;
+        }
+
+        /* Card styles & Glassmorphism */
+        .glass-panel {
+            background: rgba(21, 25, 41, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(30, 37, 58, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(236, 72, 153, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.15);
+        }
+
+        .glass-card.selected {
+            background: rgba(236, 72, 153, 0.15);
+            border-color: #EC4899;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+        }
+
+        /* Step transitions */
+        .step-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .step-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #F472B6 0%, #A78BFA 50%, #60A5FA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(11, 13, 23, 0.8);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(236, 72, 153, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(236, 72, 153, 0.6);
+        }
+
+        /* Floating cinema ticket effect */
+        .ticket-edge-left, .ticket-edge-right {
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background-color: #070913;
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+        .ticket-edge-left { left: -10px; }
+        .ticket-edge-right { right: -10px; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-3 sm:p-6 relative">
+
+    <!-- Background glowing ambient shapes -->
+    <div class="glow-bg glow-1"></div>
+    <div class="glow-bg glow-2"></div>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-xl glass-panel rounded-3xl p-5 sm:p-8 relative z-10 shadow-2xl my-auto">
+        
+        <!-- Progress Bar (Hidden on Welcome Screen) -->
+        <div id="progress-container" class="hidden mb-6">
+            <div class="flex justify-between items-center text-xs font-semibold text-gray-400 mb-2">
+                <button id="back-btn" onclick="prevStep()" class="flex items-center gap-1.5 text-pink-400 hover:text-pink-300 transition-colors">
+                    <i class="fa-solid font-bold fa-chevron-left text-xs"></i> Назад
+                </button>
+                <span id="step-indicator" class="tracking-wider uppercase text-[10px] bg-pink-500/10 text-pink-400 px-3 py-1 rounded-full border border-pink-500/20">
+                    Шаг 1 из 5
+                </span>
+            </div>
+            <div class="w-full bg-gray-800/80 h-1.5 rounded-full overflow-hidden p-0.5 border border-white/5">
+                <div id="progress-bar" class="bg-gradient-to-r from-pink-500 to-purple-500 h-full rounded-full transition-all duration-500" style="width: 20%"></div>
+            </div>
+        </div>
+
+        <!-- ================= WELCOME SCREEN ================= -->
+        <section id="step-0" class="step-content active text-center py-4">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-tr from-pink-500/20 to-purple-500/20 border border-pink-500/30 mb-6 shadow-lg shadow-pink-500/10 animate-pulse">
+                <i class="fa-solid fa-sparkles text-3xl text-pink-400"></i>
+            </div>
+            
+            <h1 class="text-2xl sm:text-3xl font-serif font-bold mb-3 tracking-wide leading-tight">
+                Приглашение для самой красивой девушки в колледже <span class="inline-block animate-bounce">✨</span>
+            </h1>
+            
+            <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 font-light max-w-md mx-auto">
+                Хочу пригласить тебя вместе отдохнуть от учебы и сходить в кино! Теплый попкорн, классный фильм и отличная компания 😉 
+                <br><br>
+                Выбери всё, как тебе удобно — а я обо всём позабочусь!
+            </p>
+
+            <div class="p-4 rounded-2xl bg-white/5 border border-white/5 mb-8 text-xs text-gray-400 flex items-center gap-3 text-left">
+                <i class="fa-solid fa-location-dot text-xl text-pink-400 shrink-0"></i>
+                <div>
+                    <span class="block text-gray-200 font-semibold">Кинотеатр «Байда»</span>
+                    <span class="text-[11px] text-gray-400">Запорожье, пр. Соборный, 162</span>
+                </div>
+            </div>
+
+            <button onclick="nextStep()" class="w-full py-4 px-8 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white font-semibold text-base shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 group">
+                <span>Давай выберем день и фильм</span>
+                <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </section>
+
+
+        <!-- ================= STEP 1: WEEK SELECTION ================= -->
+        <section id="step-1" class="step-content">
+            <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white">Когда тебе удобнее?</h2>
+            <p class="text-xs sm:text-sm text-gray-400 mb-6">Выбери подходящую неделю</p>
+
+            <div class="grid grid-cols-1 gap-4">
+                <div onclick="selectWeek('this')" id="week-this" class="glass-card p-5 rounded-2xl cursor-pointer flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:bg-pink-500 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-calendar-day text-lg"></i>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="font-semibold text-white text-base">На этой неделе</h3>
+                            <p class="text-xs text-gray-400" id="this-week-dates">Загрузка дат...</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-circle-check text-pink-500 text-xl opacity-0 group-[.selected]:opacity-100 transition-opacity"></i>
+                </div>
+
+                <div onclick="selectWeek('next')" id="week-next" class="glass-card p-5 rounded-2xl cursor-pointer flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-calendar-week text-lg"></i>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="font-semibold text-white text-base">На следующей неделе</h3>
+                            <p class="text-xs text-gray-400" id="next-week-dates">Загрузка дат...</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-circle-check text-pink-500 text-xl opacity-0 group-[.selected]:opacity-100 transition-opacity"></i>
+                </div>
+            </div>
+
+            <button onclick="validateStep1()" class="w-full mt-8 py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
+                Продолжить
+            </button>
+        </section>
+
+
+        <!-- ================= STEP 2: DAY SELECTION ================= -->
+        <section id="step-2" class="step-content">
+            <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white">Какой день лучше всего?</h2>
+            <p class="text-xs sm:text-sm text-gray-400 mb-6">Выбери удобный день недели</p>
+
+            <div id="days-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <!-- Days will be rendered dynamically via JS -->
+            </div>
+
+            <button onclick="validateStep2()" class="w-full mt-8 py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
+                Выбрать фильм
+            </button>
+        </section>
+
+
+        <!-- ================= STEP 3: MOVIE & TIME SELECTION ================= -->
+        <section id="step-3" class="step-content">
+            <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white">Выбираем фильм</h2>
+            <p class="text-xs sm:text-sm text-gray-400 mb-5">Нажми на удобный сеанс напротив фильма</p>
+
+            <div id="movies-container" class="space-y-4 max-h-[380px] overflow-y-auto pr-1">
+                <!-- Movie items will be injected by JavaScript -->
+            </div>
+
+            <button onclick="validateStep3()" class="w-full mt-6 py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
+                Перейти к вкусняшкам
+            </button>
+        </section>
+
+
+        <!-- ================= STEP 4: FOOD & DRINKS ================= -->
+        <section id="step-4" class="step-content">
+            <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white">Что будем брать в кино? 🍿</h2>
+            <p class="text-xs sm:text-sm text-gray-400 mb-5">Можешь выбрать несколько вариантов или пропустить</p>
+
+            <div class="space-y-5 max-h-[360px] overflow-y-auto pr-1">
+                <!-- Snacks Section -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-pink-400 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-cookie"></i> Закуски
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2.5" id="snacks-grid">
+                        <!-- Snacks injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Drinks Section -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-purple-400 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-glass-water"></i> Напитки
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2.5" id="drinks-grid">
+                        <!-- Drinks injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="nextStep()" class="w-full mt-6 py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
+                Посмотреть билет ✨
+            </button>
+        </section>
+
+
+        <!-- ================= STEP 5: SUMMARY & SEND ================= -->
+        <section id="step-5" class="step-content text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-400 mb-3">
+                <i class="fa-solid fa-ticket text-xl"></i>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white">Твой билет готов! 🎉</h2>
+            <p class="text-xs text-gray-400 mb-6">Проверь детали и жми кнопку ниже</p>
+
+            <!-- Ticket Card -->
+            <div class="glass-panel border-pink-500/30 rounded-2xl p-5 relative overflow-hidden mb-6 text-left shadow-xl">
+                <div class="ticket-edge-left"></div>
+                <div class="ticket-edge-right"></div>
+                
+                <div class="border-b border-white/10 pb-4 mb-4 flex justify-between items-center">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest text-pink-400 font-semibold block">Кинотеатр</span>
+                        <h4 class="font-bold text-white text-base">Байда 3D (Запорожье)</h4>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] uppercase tracking-widest text-purple-400 font-semibold block">Формат</span>
+                        <span id="summary-format" class="text-xs font-bold bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded border border-purple-500/30">2D</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-film text-pink-400 mt-1 text-sm"></i>
+                        <div>
+                            <span class="text-[11px] text-gray-400 block">Фильм</span>
+                            <span id="summary-movie" class="font-semibold text-white text-sm">Не выбран</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <div class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-calendar text-pink-400 mt-1 text-sm"></i>
+                            <div>
+                                <span class="text-[11px] text-gray-400 block">Дата</span>
+                                <span id="summary-date" class="font-semibold text-white text-xs">---</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-clock text-pink-400 mt-1 text-sm"></i>
+                            <div>
+                                <span class="text-[11px] text-gray-400 block">Время</span>
+                                <span id="summary-time" class="font-semibold text-white text-xs">---</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-white/10 pt-3 flex items-start gap-3">
+                        <i class="fa-solid fa-popcorn text-pink-400 mt-1 text-sm"></i>
+                        <div>
+                            <span class="text-[11px] text-gray-400 block">Угощения</span>
+                            <span id="summary-food" class="font-medium text-gray-200 text-xs">Ничего не выбрано</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Single Telegram Send Button -->
+            <div>
+                <button onclick="sendTelegram()" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 text-white font-bold text-base shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2.5">
+                    <i class="fa-brands fa-telegram text-2xl"></i>
+                    <span>Отправить в Telegram</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900/90 text-white text-xs px-4 py-2.5 rounded-full border border-pink-500/40 shadow-xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-info text-pink-400"></i>
+        <span id="toast-msg">Сообщение</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Current Step state
+        let currentStep = 0;
+        const totalSteps = 5;
+
+        // User Selection Object
+        const booking = {
+            week: null,       // 'this' or 'next'
+            dayObj: null,     // { dayName: 'Пятница', dateStr: '30 октября' }
+            movie: null,      // Movie object
+            time: null,       // '17:00'
+            snacks: [],       // Array of strings
+            drinks: []        // Array of strings
+        };
+
+        // Real movies & schedule for "Bayda 3D" Cinema, Zaporizhzhia
+        const moviesData = [
+            {
+                id: 'verity',
+                title: 'Верити',
+                genre: 'Драма, Триллер, Детектив',
+                format: '2D',
+                rating: '16+',
+                duration: '104 мин',
+                times: ['17:00'],
+                icon: 'fa-user-secret',
+                color: 'from-pink-500/20 to-purple-500/20',
+                desc: 'Психологический триллер с напряжённой атмосферой и непредсказуемым сюжетом по мировому бестселлеру.'
+            },
+            {
+                id: 'clayface',
+                title: 'Глиноликий',
+                genre: 'Ужасы, Фантастика, Экшн',
+                format: '2D',
+                rating: '16+',
+                duration: '110 мин',
+                times: ['19:15'],
+                icon: 'fa-mask',
+                color: 'from-amber-500/20 to-red-500/20',
+                desc: 'Динамичный и мрачный экшн-триллер о перевоплощениях, тайнах и выживании в опасном городе.'
+            },
+            {
+                id: 'beast-heart',
+                title: 'Сердце зверя',
+                genre: 'Приключения, Экшн, Триллер',
+                format: '2D',
+                rating: '16+',
+                duration: '101 мин',
+                times: ['15:00'],
+                icon: 'fa-paw',
+                color: 'from-orange-500/20 to-amber-500/20',
+                desc: 'Захватывающая история выживания и дикой природы, держит в напряжении от начала до конца.'
+            },
+            {
+                id: 'barbell-dances',
+                title: 'Танцы со штангой',
+                genre: 'Комедия, Мелодрама',
+                format: '2D',
+                rating: '12+',
+                duration: '95 мин',
+                times: ['16:30'],
+                icon: 'fa-dumbbell',
+                color: 'from-emerald-500/20 to-teal-500/20',
+                desc: 'Легкая и смешная романтическая комедия про спорт, любовь и курьёзные жизненные ситуации.'
+            },
+            {
+                id: 'hope',
+                title: 'Надежда',
+                genre: 'Драма, Триллер',
+                format: '2D',
+                rating: '16+',
+                duration: '108 мин',
+                times: ['18:30'],
+                icon: 'fa-heart-pulse',
+                color: 'from-blue-500/20 to-indigo-500/20',
+                desc: 'Глубокая драма о вере, силе духа и человеческих отношениях в непредсказуемых обстоятельствах.'
+            },
+            {
+                id: 'forgotten-island',
+                title: 'Забытый остров',
+                genre: 'Анимация, Приключения, Комедия',
+                format: '3D',
+                rating: '0+',
+                duration: '90 мин',
+                times: ['12:30', '14:30'],
+                icon: 'fa-island-tropical',
+                color: 'from-sky-500/20 to-cyan-500/20',
+                desc: 'Яркий и весёлый мультфильм с классным юмором для отличного настроения.'
+            }
+        ];
+
+        // Food and drinks items
+        const snacksList = [
+            { id: 'popcorn-cheese', name: 'Попкорн Сырный 🧀' },
+            { id: 'popcorn-sweet', name: 'Попкорн Сладкий 🍿' },
+            { id: 'popcorn-salt', name: 'Попкорн Соленый 🧂' },
+            { id: 'nachos', name: 'Начос с соусом 🌮' },
+            { id: 'chips', name: 'Хрустящие чипсы 🥔' },
+            { id: 'mms', name: 'Конфеты / M&Ms 🍬' }
+        ];
+
+        const drinksList = [
+            { id: 'cola', name: 'Coca-Cola 🥤' },
+            { id: 'sprite', name: 'Sprite 🍋' },
+            { id: 'juice', name: 'Сок (в ассортименте) 🧃' },
+            { id: 'water', name: 'Минеральная вода 💧' },
+            { id: 'coffee', name: 'Кофе / Латте ☕' },
+            { id: 'tea', name: 'Ароматный чай 🍵' }
+        ];
+
+        // Helper: Format Date strings
+        function getWeekDays(isNextWeek = false) {
+            const daysNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+            const monthsNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+
+            const today = new Date();
+            const currentDayOfWeek = (today.getDay() + 6) % 7; // Monday = 0
+            
+            // Start of this week (Monday)
+            const mondayThisWeek = new Date(today);
+            mondayThisWeek.setDate(today.getDate() - currentDayOfWeek);
+
+            // Target Monday
+            const targetMonday = new Date(mondayThisWeek);
+            if (isNextWeek) {
+                targetMonday.setDate(mondayThisWeek.getDate() + 7);
+            }
+
+            const daysResult = [];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(targetMonday);
+                d.setDate(targetMonday.getDate() + i);
+                
+                const isPast = !isNextWeek && i < currentDayOfWeek;
+                daysResult.push({
+                    dayName: daysNames[i],
+                    dateStr: `${d.getDate()} ${monthsNames[d.getMonth()]}`,
+                    isPast: isPast,
+                    fullDate: d
+                });
+            }
+
+            return daysResult;
+        }
+
+        // Initialize App Dates on Load
+        window.onload = function() {
+            const thisWeek = getWeekDays(false);
+            const nextWeek = getWeekDays(true);
+
+            document.getElementById('this-week-dates').innerText = `${thisWeek[0].dateStr} - ${thisWeek[6].dateStr}`;
+            document.getElementById('next-week-dates').innerText = `${nextWeek[0].dateStr} - ${nextWeek[6].dateStr}`;
+
+            renderFoodAndDrinks();
+        };
+
+        // Toast notification
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2500);
+        }
+
+        // Navigation controls
+        function updateProgress() {
+            const container = document.getElementById('progress-container');
+            const bar = document.getElementById('progress-bar');
+            const indicator = document.getElementById('step-indicator');
+
+            if (currentStep === 0) {
+                container.classList.add('hidden');
+            } else {
+                container.classList.remove('hidden');
+                bar.style.width = `${(currentStep / totalSteps) * 100}%`;
+                indicator.innerText = `Шаг ${currentStep} из ${totalSteps}`;
+            }
+
+            document.querySelectorAll('.step-content').forEach((el, idx) => {
+                if (idx === currentStep) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateProgress();
+                if (currentStep === 5) renderSummary();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateProgress();
+            }
+        }
+
+        // STEP 1 logic
+        function selectWeek(weekType) {
+            booking.week = weekType;
+            document.getElementById('week-this').classList.toggle('selected', weekType === 'this');
+            document.getElementById('week-next').classList.toggle('selected', weekType === 'next');
+        }
+
+        function validateStep1() {
+            if (!booking.week) {
+                showToast('Пожалуйста, выбери неделю 😊');
+                return;
+            }
+            renderDaysGrid();
+            nextStep();
+        }
+
+        // STEP 2 logic: Render Days based on selected week
+        function renderDaysGrid() {
+            const grid = document.getElementById('days-grid');
+            grid.innerHTML = '';
+
+            const daysData = getWeekDays(booking.week === 'next');
+
+            daysData.forEach(item => {
+                const card = document.createElement('div');
+                
+                if (item.isPast) {
+                    card.className = "glass-card p-3 rounded-xl opacity-40 cursor-not-allowed text-center";
+                    card.innerHTML = `
+                        <span class="block text-xs text-gray-400 font-medium">${item.dayName}</span>
+                        <span class="block text-sm font-bold text-gray-500 mt-1">${item.dateStr}</span>
+                        <span class="text-[9px] text-gray-500 block mt-1">Прошел</span>
+                    `;
+                } else {
+                    const isSelected = booking.dayObj && booking.dayObj.dateStr === item.dateStr;
+                    card.className = `glass-card p-3 rounded-xl cursor-pointer text-center group transition-all ${isSelected ? 'selected' : ''}`;
+                    card.onclick = () => {
+                        document.querySelectorAll('#days-grid .glass-card').forEach(c => c.classList.remove('selected'));
+                        card.classList.add('selected');
+                        booking.dayObj = item;
+                    };
+                    card.innerHTML = `
+                        <span class="block text-xs text-pink-400 font-medium group-hover:text-pink-300">${item.dayName}</span>
+                        <span class="block text-sm sm:text-base font-bold text-white mt-1">${item.dateStr}</span>
+                    `;
+                }
+
+                grid.appendChild(card);
+            });
+        }
+
+        function validateStep2() {
+            if (!booking.dayObj) {
+                showToast('Выбери удобный день недели 😉');
+                return;
+            }
+            renderMovies();
+            nextStep();
+        }
+
+        // STEP 3 logic: Render movies & time selection
+        function renderMovies() {
+            const container = document.getElementById('movies-container');
+            container.innerHTML = '';
+
+            moviesData.forEach(m => {
+                const isMovieSelected = booking.movie && booking.movie.id === m.id;
+                const movieCard = document.createElement('div');
+                movieCard.className = `glass-card p-4 rounded-2xl relative transition-all ${isMovieSelected ? 'selected' : ''}`;
+                movieCard.id = `movie-card-${m.id}`;
+
+                let timeButtonsHTML = m.times.map(t => {
+                    const isTimeSelected = isMovieSelected && booking.time === t;
+                    return `
+                        <button type="button" onclick="selectMovieAndTime('${m.id}', '${t}')" 
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${
+                                isTimeSelected 
+                                    ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white border-pink-400 shadow-md shadow-pink-500/40 scale-105' 
+                                    : 'bg-white/5 border-white/10 text-gray-300 hover:border-pink-500/50 hover:text-white hover:bg-white/10'
+                            }">
+                            <i class="fa-regular fa-clock text-[11px]"></i>
+                            <span>${t}</span>
+                        </button>
+                    `;
+                }).join('');
+
+                movieCard.innerHTML = `
+                    <div class="flex gap-3.5 items-start">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${m.color} border border-white/10 flex items-center justify-center shrink-0 text-pink-400">
+                            <i class="fa-solid ${m.icon} text-xl"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h3 class="font-bold text-white text-base truncate">${m.title}</h3>
+                                <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-500/20 text-pink-300 font-semibold border border-pink-500/30">${m.format}</span>
+                                <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-800 text-gray-400">${m.rating}</span>
+                            </div>
+                            <p class="text-[11px] text-pink-400/80 mt-0.5">${m.genre}</p>
+                            <p class="text-xs text-gray-300 mt-2 font-light leading-relaxed">${m.desc}</p>
+                            
+                            <div class="mt-3.5 pt-3 border-t border-white/5 flex items-center justify-between flex-wrap gap-2">
+                                <span class="text-[11px] text-gray-400 font-medium">Выберите время:</span>
+                                <div class="flex gap-2 flex-wrap">
+                                    ${timeButtonsHTML}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(movieCard);
+            });
+        }
+
+        function selectMovieAndTime(movieId, timeStr) {
+            const movie = moviesData.find(m => m.id === movieId);
+            booking.movie = movie;
+            booking.time = timeStr;
+
+            renderMovies(); // Re-render to highlight active time button & card
+        }
+
+        function validateStep3() {
+            if (!booking.movie || !booking.time) {
+                showToast('Выбери фильм и удобный сеанс 🎬');
+                return;
+            }
+            nextStep();
+        }
+
+        // STEP 4 logic: Render snacks and drinks
+        function renderFoodAndDrinks() {
+            const snacksGrid = document.getElementById('snacks-grid');
+            const drinksGrid = document.getElementById('drinks-grid');
+
+            snacksGrid.innerHTML = snacksList.map(item => `
+                <div onclick="toggleFoodItem('snacks', '${item.name}', this)" class="glass-card p-3 rounded-xl cursor-pointer text-xs font-medium text-gray-300 hover:text-white flex items-center justify-between transition-all">
+                    <span>${item.name}</span>
+                    <i class="fa-solid fa-check text-pink-400 text-xs opacity-0 check-icon"></i>
+                </div>
+            `).join('');
+
+            drinksGrid.innerHTML = drinksList.map(item => `
+                <div onclick="toggleFoodItem('drinks', '${item.name}', this)" class="glass-card p-3 rounded-xl cursor-pointer text-xs font-medium text-gray-300 hover:text-white flex items-center justify-between transition-all">
+                    <span>${item.name}</span>
+                    <i class="fa-solid fa-check text-purple-400 text-xs opacity-0 check-icon"></i>
+                </div>
+            `).join('');
+        }
+
+        function toggleFoodItem(category, name, el) {
+            const arr = booking[category];
+            const index = arr.indexOf(name);
+
+            if (index > -1) {
+                arr.splice(index, 1);
+                el.classList.remove('selected');
+                el.querySelector('.check-icon').classList.add('opacity-0');
+            } else {
+                arr.push(name);
+                el.classList.add('selected');
+                el.querySelector('.check-icon').classList.remove('opacity-0');
+            }
+        }
+
+        // STEP 5: Render Ticket Summary
+        function renderSummary() {
+            document.getElementById('summary-movie').innerText = booking.movie ? booking.movie.title : 'Не выбран';
+            document.getElementById('summary-format').innerText = booking.movie ? booking.movie.format : '2D';
+            
+            if (booking.dayObj) {
+                document.getElementById('summary-date').innerText = `${booking.dayObj.dayName}, ${booking.dayObj.dateStr}`;
+            } else {
+                document.getElementById('summary-date').innerText = '---';
+            }
+
+            document.getElementById('summary-time').innerText = booking.time || '---';
+
+            const allFood = [...booking.snacks, ...booking.drinks];
+            if (allFood.length > 0) {
+                document.getElementById('summary-food').innerText = allFood.join(', ');
+            } else {
+                document.getElementById('summary-food').innerText = 'Пока ничего (купим на месте 😋)';
+            }
+        }
+
+        // Formulate output string for Telegram
+        function buildTelegramText() {
+            const dayStr = booking.dayObj ? `${booking.dayObj.dayName} (${booking.dayObj.dateStr})` : '';
+            const movieStr = booking.movie ? booking.movie.title : '';
+            const foodStr = [...booking.snacks, ...booking.drinks].join(', ') || 'Выберем на месте!';
+
+            return `Привет! ✨ Я с удовольствием схожу с тобой в кино! 🎉\n\n` +
+                   `🎬 Фильм: ${movieStr}\n` +
+                   `📅 День: ${dayStr}\n` +
+                   `⏰ Время: ${booking.time}\n` +
+                   `🍿 Угощения: ${foodStr}\n\n` +
+                   `До встречи в кинотеатре «Байда»! 😉`;
+        }
+
+        function sendTelegram() {
+            const text = encodeURIComponent(buildTelegramText());
+            window.open(`https://t.me/share/url?url=&text=${text}`, '_blank');
+        }
+    </script>
+</body>
+</html>
