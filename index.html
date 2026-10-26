@@ -23,11 +23,11 @@
                     },
                     colors: {
                         cinema: {
-                            dark: '#0B0D17',
-                            card: '#151929',
-                            accent: '#EC4899',
-                            purple: '#8B5CF6',
-                            glow: '#3B82F6'
+                            dark: '#121015',
+                            card: '#1C1824',
+                            accent: '#F43F5E',
+                            purple: '#A855F7',
+                            glow: '#FB7185'
                         }
                     }
                 }
@@ -37,7 +37,7 @@
 
     <style>
         body {
-            background-color: #070913;
+            background-color: #0D0B10;
             color: #F3F4F6;
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
@@ -47,53 +47,53 @@
         .glow-bg {
             position: fixed;
             border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.35;
+            filter: blur(140px);
+            opacity: 0.25;
             z-index: 0;
             pointer-events: none;
         }
 
         .glow-1 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, #ec4899 0%, rgba(236,72,153,0) 70%);
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, #f43f5e 0%, rgba(244,63,94,0) 70%);
             top: -50px;
             left: -50px;
         }
 
         .glow-2 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, #8b5cf6 0%, rgba(139,92,246,0) 70%);
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, #a855f7 0%, rgba(168,85,247,0) 70%);
             bottom: -100px;
             right: -100px;
         }
 
         /* Card styles & Glassmorphism */
         .glass-panel {
-            background: rgba(21, 25, 41, 0.75);
+            background: rgba(28, 24, 36, 0.8);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .glass-card {
-            background: rgba(30, 37, 58, 0.6);
+            background: rgba(38, 32, 48, 0.55);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass-card:hover {
-            border-color: rgba(236, 72, 153, 0.4);
+            border-color: rgba(244, 63, 94, 0.4);
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.15);
+            box-shadow: 0 10px 25px -5px rgba(244, 63, 94, 0.15);
         }
 
         .glass-card.selected {
-            background: rgba(236, 72, 153, 0.15);
-            border-color: #EC4899;
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+            background: rgba(244, 63, 94, 0.15);
+            border-color: #F43F5E;
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);
         }
 
         /* Step transitions */
@@ -112,71 +112,71 @@
 
         /* Gradient Text */
         .gradient-text {
-            background: linear-gradient(135deg, #F472B6 0%, #A78BFA 50%, #60A5FA 100%);
+            background: linear-gradient(135deg, #FDA4AF 0%, #D8B4FE 50%, #93C5FD 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(11, 13, 23, 0.8);
+            background: rgba(13, 11, 16, 0.8);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(236, 72, 153, 0.3);
+            background: rgba(244, 63, 94, 0.3);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(236, 72, 153, 0.6);
+            background: rgba(244, 63, 94, 0.6);
         }
 
         /* Floating cinema ticket effect */
         .ticket-edge-left, .ticket-edge-right {
             position: absolute;
             top: 50%;
-            width: 20px;
-            height: 20px;
-            background-color: #070913;
+            width: 18px;
+            height: 18px;
+            background-color: #0D0B10;
             border-radius: 50%;
             transform: translateY(-50%);
         }
-        .ticket-edge-left { left: -10px; }
-        .ticket-edge-right { right: -10px; }
+        .ticket-edge-left { left: -9px; }
+        .ticket-edge-right { right: -9px; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-3 sm:p-6 relative">
+<body class="min-h-screen flex items-center justify-center p-3 sm:p-5 relative">
 
     <!-- Background glowing ambient shapes -->
     <div class="glow-bg glow-1"></div>
     <div class="glow-bg glow-2"></div>
 
     <!-- Main Container -->
-    <main class="w-full max-w-xl glass-panel rounded-3xl p-5 sm:p-8 relative z-10 shadow-2xl my-auto">
+    <main class="w-full max-w-xl glass-panel rounded-3xl p-4 sm:p-7 relative z-10 shadow-2xl my-auto">
         
         <!-- Progress Bar (Hidden on Welcome Screen) -->
-        <div id="progress-container" class="hidden mb-6">
+        <div id="progress-container" class="hidden mb-5">
             <div class="flex justify-between items-center text-xs font-semibold text-gray-400 mb-2">
-                <button id="back-btn" onclick="prevStep()" class="flex items-center gap-1.5 text-pink-400 hover:text-pink-300 transition-colors">
+                <button id="back-btn" onclick="prevStep()" class="flex items-center gap-1.5 text-rose-400 hover:text-rose-300 transition-colors py-1">
                     <i class="fa-solid font-bold fa-chevron-left text-xs"></i> Назад
                 </button>
-                <span id="step-indicator" class="tracking-wider uppercase text-[10px] bg-pink-500/10 text-pink-400 px-3 py-1 rounded-full border border-pink-500/20">
+                <span id="step-indicator" class="tracking-wider uppercase text-[10px] bg-rose-500/10 text-rose-400 px-3 py-1 rounded-full border border-rose-500/20">
                     Шаг 1 из 5
                 </span>
             </div>
-            <div class="w-full bg-gray-800/80 h-1.5 rounded-full overflow-hidden p-0.5 border border-white/5">
-                <div id="progress-bar" class="bg-gradient-to-r from-pink-500 to-purple-500 h-full rounded-full transition-all duration-500" style="width: 20%"></div>
+            <div class="w-full bg-gray-900/80 h-1.5 rounded-full overflow-hidden p-0.5 border border-white/5">
+                <div id="progress-bar" class="bg-gradient-to-r from-rose-400 to-purple-400 h-full rounded-full transition-all duration-500" style="width: 20%"></div>
             </div>
         </div>
 
         <!-- ================= WELCOME SCREEN ================= -->
-        <section id="step-0" class="step-content active text-center py-4">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-tr from-pink-500/20 to-purple-500/20 border border-pink-500/30 mb-6 shadow-lg shadow-pink-500/10 animate-pulse">
-                <i class="fa-solid fa-sparkles text-3xl text-pink-400"></i>
+        <section id="step-0" class="step-content active text-center py-3">
+            <div class="inline-flex items-center justify-center w-18 h-18 rounded-full bg-gradient-to-tr from-rose-500/15 to-purple-500/15 border border-rose-500/30 mb-5 shadow-lg shadow-rose-500/10 animate-pulse">
+                <i class="fa-solid fa-sparkles text-2xl text-rose-400"></i>
             </div>
             
-            <h1 class="text-2xl sm:text-3xl font-serif font-bold mb-3 tracking-wide leading-tight">
+            <h1 class="text-2xl sm:text-3xl font-serif font-bold mb-3 tracking-wide leading-tight text-white">
                 Приглашение для самой красивой девушки в колледже <span class="inline-block animate-bounce">✨</span>
             </h1>
             
@@ -186,15 +186,15 @@
                 Выбери всё, как тебе удобно — а я обо всём позабочусь!
             </p>
 
-            <div class="p-4 rounded-2xl bg-white/5 border border-white/5 mb-8 text-xs text-gray-400 flex items-center gap-3 text-left">
-                <i class="fa-solid fa-location-dot text-xl text-pink-400 shrink-0"></i>
+            <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5 mb-7 text-xs text-gray-400 flex items-center gap-3 text-left">
+                <i class="fa-solid fa-location-dot text-lg text-rose-400 shrink-0"></i>
                 <div>
                     <span class="block text-gray-200 font-semibold">Кинотеатр «Байда»</span>
                     <span class="text-[11px] text-gray-400">Запорожье, пр. Соборный, 162</span>
                 </div>
             </div>
 
-            <button onclick="nextStep()" class="w-full py-4 px-8 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white font-semibold text-base shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 group">
+            <button onclick="nextStep()" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 text-white font-semibold text-base shadow-lg shadow-rose-500/25 hover:shadow-rose-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 group">
                 <span>Давай выберем день и фильм</span>
                 <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
             </button>
@@ -204,37 +204,37 @@
         <!-- ================= STEP 1: WEEK SELECTION ================= -->
         <section id="step-1" class="step-content">
             <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white">Когда тебе удобнее?</h2>
-            <p class="text-xs sm:text-sm text-gray-400 mb-6">Выбери подходящую неделю</p>
+            <p class="text-xs sm:text-sm text-gray-400 mb-5">Выбери подходящую неделю</p>
 
-            <div class="grid grid-cols-1 gap-4">
-                <div onclick="selectWeek('this')" id="week-this" class="glass-card p-5 rounded-2xl cursor-pointer flex items-center justify-between group">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:bg-pink-500 group-hover:text-white transition-all">
-                            <i class="fa-solid fa-calendar-day text-lg"></i>
+            <div class="grid grid-cols-1 gap-3.5">
+                <div onclick="selectWeek('this')" id="week-this" class="glass-card p-4 rounded-2xl cursor-pointer flex items-center justify-between group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 group-hover:bg-rose-500 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-calendar-day text-base"></i>
                         </div>
                         <div class="text-left">
                             <h3 class="font-semibold text-white text-base">На этой неделе</h3>
                             <p class="text-xs text-gray-400" id="this-week-dates">Загрузка дат...</p>
                         </div>
                     </div>
-                    <i class="fa-solid fa-circle-check text-pink-500 text-xl opacity-0 group-[.selected]:opacity-100 transition-opacity"></i>
+                    <i class="fa-solid fa-circle-check text-rose-400 text-xl opacity-0 group-[.selected]:opacity-100 transition-opacity"></i>
                 </div>
 
-                <div onclick="selectWeek('next')" id="week-next" class="glass-card p-5 rounded-2xl cursor-pointer flex items-center justify-between group">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
-                            <i class="fa-solid fa-calendar-week text-lg"></i>
+                <div onclick="selectWeek('next')" id="week-next" class="glass-card p-4 rounded-2xl cursor-pointer flex items-center justify-between group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-calendar-week text-base"></i>
                         </div>
                         <div class="text-left">
                             <h3 class="font-semibold text-white text-base">На следующей неделе</h3>
                             <p class="text-xs text-gray-400" id="next-week-dates">Загрузка дат...</p>
                         </div>
                     </div>
-                    <i class="fa-solid fa-circle-check text-pink-500 text-xl opacity-0 group-[.selected]:opacity-100 transition-opacity"></i>
+                    <i class="fa-solid fa-circle-check text-rose-400 text-xl opacity-0 group-[.selected]:opacity-100 transition-opacity"></i>
                 </div>
             </div>
 
-            <button onclick="validateStep1()" class="w-full mt-8 py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
+            <button onclick="validateStep1()" class="w-full mt-7 py-3 px-6 rounded-xl bg-gradient-to-r from-rose-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
                 Продолжить
             </button>
         </section>
@@ -243,13 +243,13 @@
         <!-- ================= STEP 2: DAY SELECTION ================= -->
         <section id="step-2" class="step-content">
             <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white">Какой день лучше всего?</h2>
-            <p class="text-xs sm:text-sm text-gray-400 mb-6">Выбери удобный день недели</p>
+            <p class="text-xs sm:text-sm text-gray-400 mb-5">Выбери удобный день недели</p>
 
-            <div id="days-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <!-- Days will be rendered dynamically via JS -->
+            <div id="days-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                <!-- Days rendered dynamically -->
             </div>
 
-            <button onclick="validateStep2()" class="w-full mt-8 py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
+            <button onclick="validateStep2()" class="w-full mt-7 py-3 px-6 rounded-xl bg-gradient-to-r from-rose-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
                 Выбрать фильм
             </button>
         </section>
@@ -258,13 +258,13 @@
         <!-- ================= STEP 3: MOVIE & TIME SELECTION ================= -->
         <section id="step-3" class="step-content">
             <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white">Выбираем фильм</h2>
-            <p class="text-xs sm:text-sm text-gray-400 mb-5">Нажми на удобный сеанс напротив фильма</p>
+            <p class="text-xs sm:text-sm text-gray-400 mb-4">Нажми на удобный сеанс напротив фильма</p>
 
-            <div id="movies-container" class="space-y-4 max-h-[380px] overflow-y-auto pr-1">
-                <!-- Movie items will be injected by JavaScript -->
+            <div id="movies-container" class="space-y-3.5 max-h-[340px] overflow-y-auto pr-1">
+                <!-- Movie items injected by JS -->
             </div>
 
-            <button onclick="validateStep3()" class="w-full mt-6 py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
+            <button onclick="validateStep3()" class="w-full mt-5 py-3 px-6 rounded-xl bg-gradient-to-r from-rose-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
                 Перейти к вкусняшкам
             </button>
         </section>
@@ -273,31 +273,25 @@
         <!-- ================= STEP 4: FOOD & DRINKS ================= -->
         <section id="step-4" class="step-content">
             <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white">Что будем брать в кино? 🍿</h2>
-            <p class="text-xs sm:text-sm text-gray-400 mb-5">Можешь выбрать несколько вариантов или пропустить</p>
+            <p class="text-xs sm:text-sm text-gray-400 mb-4">Можешь выбрать несколько вариантов или пропустить</p>
 
-            <div class="space-y-5 max-h-[360px] overflow-y-auto pr-1">
-                <!-- Snacks Section -->
+            <div class="space-y-4 max-h-[330px] overflow-y-auto pr-1">
                 <div>
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-pink-400 mb-3 flex items-center gap-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-rose-400 mb-2.5 flex items-center gap-2">
                         <i class="fa-solid fa-cookie"></i> Закуски
                     </h3>
-                    <div class="grid grid-cols-2 gap-2.5" id="snacks-grid">
-                        <!-- Snacks injected via JS -->
-                    </div>
+                    <div class="grid grid-cols-2 gap-2" id="snacks-grid"></div>
                 </div>
 
-                <!-- Drinks Section -->
                 <div>
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-purple-400 mb-3 flex items-center gap-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-purple-400 mb-2.5 flex items-center gap-2">
                         <i class="fa-solid fa-glass-water"></i> Напитки
                     </h3>
-                    <div class="grid grid-cols-2 gap-2.5" id="drinks-grid">
-                        <!-- Drinks injected via JS -->
-                    </div>
+                    <div class="grid grid-cols-2 gap-2" id="drinks-grid"></div>
                 </div>
             </div>
 
-            <button onclick="nextStep()" class="w-full mt-6 py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
+            <button onclick="nextStep()" class="w-full mt-5 py-3 px-6 rounded-xl bg-gradient-to-r from-rose-500 to-purple-600 text-white font-semibold text-sm shadow-md hover:opacity-95 transition-all">
                 Посмотреть билет ✨
             </button>
         </section>
@@ -305,21 +299,21 @@
 
         <!-- ================= STEP 5: SUMMARY & SEND ================= -->
         <section id="step-5" class="step-content text-center">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-400 mb-3">
-                <i class="fa-solid fa-ticket text-xl"></i>
+            <div class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-400 mb-2.5">
+                <i class="fa-solid fa-ticket text-lg"></i>
             </div>
             <h2 class="text-xl sm:text-2xl font-bold mb-1 text-white">Твой билет готов! 🎉</h2>
-            <p class="text-xs text-gray-400 mb-6">Проверь детали и жми кнопку ниже</p>
+            <p class="text-xs text-gray-400 mb-5">Проверь детали и жми кнопку ниже</p>
 
             <!-- Ticket Card -->
-            <div class="glass-panel border-pink-500/30 rounded-2xl p-5 relative overflow-hidden mb-6 text-left shadow-xl">
+            <div class="glass-panel border-rose-500/30 rounded-2xl p-4.5 relative overflow-hidden mb-5 text-left shadow-xl">
                 <div class="ticket-edge-left"></div>
                 <div class="ticket-edge-right"></div>
                 
-                <div class="border-b border-white/10 pb-4 mb-4 flex justify-between items-center">
+                <div class="border-b border-white/10 pb-3.5 mb-3.5 flex justify-between items-center">
                     <div>
-                        <span class="text-[10px] uppercase tracking-widest text-pink-400 font-semibold block">Кинотеатр</span>
-                        <h4 class="font-bold text-white text-base">Байда 3D (Запорожье)</h4>
+                        <span class="text-[10px] uppercase tracking-widest text-rose-400 font-semibold block">Кинотеатр</span>
+                        <h4 class="font-bold text-white text-sm sm:text-base">Байда 3D (Запорожье)</h4>
                     </div>
                     <div class="text-right">
                         <span class="text-[10px] uppercase tracking-widest text-purple-400 font-semibold block">Формат</span>
@@ -327,34 +321,34 @@
                     </div>
                 </div>
 
-                <div class="space-y-3">
+                <div class="space-y-2.5 text-xs sm:text-sm">
                     <div class="flex items-start gap-3">
-                        <i class="fa-solid fa-film text-pink-400 mt-1 text-sm"></i>
+                        <i class="fa-solid fa-film text-rose-400 mt-0.5"></i>
                         <div>
                             <span class="text-[11px] text-gray-400 block">Фильм</span>
-                            <span id="summary-movie" class="font-semibold text-white text-sm">Не выбран</span>
+                            <span id="summary-movie" class="font-semibold text-white">Не выбран</span>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2 pt-1">
+                    <div class="grid grid-cols-2 gap-2 pt-0.5">
                         <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-calendar text-pink-400 mt-1 text-sm"></i>
+                            <i class="fa-solid fa-calendar text-rose-400 mt-0.5"></i>
                             <div>
                                 <span class="text-[11px] text-gray-400 block">Дата</span>
-                                <span id="summary-date" class="font-semibold text-white text-xs">---</span>
+                                <span id="summary-date" class="font-semibold text-white">---</span>
                             </div>
                         </div>
                         <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-clock text-pink-400 mt-1 text-sm"></i>
+                            <i class="fa-solid fa-clock text-rose-400 mt-0.5"></i>
                             <div>
                                 <span class="text-[11px] text-gray-400 block">Время</span>
-                                <span id="summary-time" class="font-semibold text-white text-xs">---</span>
+                                <span id="summary-time" class="font-semibold text-white">---</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="border-t border-white/10 pt-3 flex items-start gap-3">
-                        <i class="fa-solid fa-popcorn text-pink-400 mt-1 text-sm"></i>
+                    <div class="border-t border-white/10 pt-2.5 flex items-start gap-3">
+                        <i class="fa-solid fa-popcorn text-rose-400 mt-0.5"></i>
                         <div>
                             <span class="text-[11px] text-gray-400 block">Угощения</span>
                             <span id="summary-food" class="font-medium text-gray-200 text-xs">Ничего не выбрано</span>
@@ -363,9 +357,9 @@
                 </div>
             </div>
 
-            <!-- Single Telegram Send Button -->
+            <!-- Telegram Send Button -->
             <div>
-                <button onclick="sendTelegram()" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 text-white font-bold text-base shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2.5">
+                <button onclick="sendTelegram()" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 text-white font-bold text-base shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2.5">
                     <i class="fa-brands fa-telegram text-2xl"></i>
                     <span>Отправить в Telegram</span>
                 </button>
@@ -375,28 +369,25 @@
     </main>
 
     <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900/90 text-white text-xs px-4 py-2.5 rounded-full border border-pink-500/40 shadow-xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2">
-        <i class="fa-solid fa-circle-info text-pink-400"></i>
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900/95 text-white text-xs px-4 py-2.5 rounded-full border border-rose-500/40 shadow-xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-info text-rose-400"></i>
         <span id="toast-msg">Сообщение</span>
     </div>
 
     <!-- JavaScript Logic -->
     <script>
-        // Current Step state
         let currentStep = 0;
         const totalSteps = 5;
 
-        // User Selection Object
         const booking = {
-            week: null,       // 'this' or 'next'
-            dayObj: null,     // { dayName: 'Пятница', dateStr: '30 октября' }
-            movie: null,      // Movie object
-            time: null,       // '17:00'
-            snacks: [],       // Array of strings
-            drinks: []        // Array of strings
+            week: null,
+            dayObj: null,
+            movie: null,
+            time: null,
+            snacks: [],
+            drinks: []
         };
 
-        // Real movies & schedule for "Bayda 3D" Cinema, Zaporizhzhia
         const moviesData = [
             {
                 id: 'verity',
@@ -407,7 +398,7 @@
                 duration: '104 мин',
                 times: ['17:00'],
                 icon: 'fa-user-secret',
-                color: 'from-pink-500/20 to-purple-500/20',
+                color: 'from-rose-500/20 to-purple-500/20',
                 desc: 'Психологический триллер с напряжённой атмосферой и непредсказуемым сюжетом по мировому бестселлеру.'
             },
             {
@@ -419,7 +410,7 @@
                 duration: '110 мин',
                 times: ['19:15'],
                 icon: 'fa-mask',
-                color: 'from-amber-500/20 to-red-500/20',
+                color: 'from-amber-500/20 to-rose-500/20',
                 desc: 'Динамичный и мрачный экшн-триллер о перевоплощениях, тайнах и выживании в опасном городе.'
             },
             {
@@ -472,7 +463,6 @@
             }
         ];
 
-        // Food and drinks items
         const snacksList = [
             { id: 'popcorn-cheese', name: 'Попкорн Сырный 🧀' },
             { id: 'popcorn-sweet', name: 'Попкорн Сладкий 🍿' },
@@ -491,19 +481,16 @@
             { id: 'tea', name: 'Ароматный чай 🍵' }
         ];
 
-        // Helper: Format Date strings
         function getWeekDays(isNextWeek = false) {
             const daysNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
             const monthsNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 
             const today = new Date();
-            const currentDayOfWeek = (today.getDay() + 6) % 7; // Monday = 0
-            
-            // Start of this week (Monday)
+            const currentDayOfWeek = (today.getDay() + 6) % 7;
+
             const mondayThisWeek = new Date(today);
             mondayThisWeek.setDate(today.getDate() - currentDayOfWeek);
 
-            // Target Monday
             const targetMonday = new Date(mondayThisWeek);
             if (isNextWeek) {
                 targetMonday.setDate(mondayThisWeek.getDate() + 7);
@@ -526,18 +513,16 @@
             return daysResult;
         }
 
-        // Initialize App Dates on Load
         window.onload = function() {
             const thisWeek = getWeekDays(false);
             const nextWeek = getWeekDays(true);
 
-            document.getElementById('this-week-dates').innerText = `${thisWeek[0].dateStr} - ${thisWeek[6].dateStr}`;
-            document.getElementById('next-week-dates').innerText = `${nextWeek[0].dateStr} - ${nextWeek[6].dateStr}`;
+            document.getElementById('this-week-dates').innerText = `${thisWeek[0].dateStr} — ${thisWeek[6].dateStr}`;
+            document.getElementById('next-week-dates').innerText = `${nextWeek[0].dateStr} — ${nextWeek[6].dateStr}`;
 
             renderFoodAndDrinks();
         };
 
-        // Toast notification
         function showToast(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
@@ -547,7 +532,6 @@
             }, 2500);
         }
 
-        // Navigation controls
         function updateProgress() {
             const container = document.getElementById('progress-container');
             const bar = document.getElementById('progress-bar');
@@ -585,7 +569,6 @@
             }
         }
 
-        // STEP 1 logic
         function selectWeek(weekType) {
             booking.week = weekType;
             document.getElementById('week-this').classList.toggle('selected', weekType === 'this');
@@ -601,7 +584,6 @@
             nextStep();
         }
 
-        // STEP 2 logic: Render Days based on selected week
         function renderDaysGrid() {
             const grid = document.getElementById('days-grid');
             grid.innerHTML = '';
@@ -627,7 +609,7 @@
                         booking.dayObj = item;
                     };
                     card.innerHTML = `
-                        <span class="block text-xs text-pink-400 font-medium group-hover:text-pink-300">${item.dayName}</span>
+                        <span class="block text-xs text-rose-400 font-medium group-hover:text-rose-300">${item.dayName}</span>
                         <span class="block text-sm sm:text-base font-bold text-white mt-1">${item.dateStr}</span>
                     `;
                 }
@@ -645,7 +627,6 @@
             nextStep();
         }
 
-        // STEP 3 logic: Render movies & time selection
         function renderMovies() {
             const container = document.getElementById('movies-container');
             container.innerHTML = '';
@@ -653,17 +634,16 @@
             moviesData.forEach(m => {
                 const isMovieSelected = booking.movie && booking.movie.id === m.id;
                 const movieCard = document.createElement('div');
-                movieCard.className = `glass-card p-4 rounded-2xl relative transition-all ${isMovieSelected ? 'selected' : ''}`;
-                movieCard.id = `movie-card-${m.id}`;
+                movieCard.className = `glass-card p-3.5 rounded-2xl relative transition-all ${isMovieSelected ? 'selected' : ''}`;
 
                 let timeButtonsHTML = m.times.map(t => {
                     const isTimeSelected = isMovieSelected && booking.time === t;
                     return `
                         <button type="button" onclick="selectMovieAndTime('${m.id}', '${t}')" 
-                            class="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${
+                            class="px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${
                                 isTimeSelected 
-                                    ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white border-pink-400 shadow-md shadow-pink-500/40 scale-105' 
-                                    : 'bg-white/5 border-white/10 text-gray-300 hover:border-pink-500/50 hover:text-white hover:bg-white/10'
+                                    ? 'bg-gradient-to-r from-rose-500 to-purple-500 text-white border-rose-400 shadow-md shadow-rose-500/40 scale-105' 
+                                    : 'bg-white/5 border-white/10 text-gray-300 hover:border-rose-500/50 hover:text-white hover:bg-white/10'
                             }">
                             <i class="fa-regular fa-clock text-[11px]"></i>
                             <span>${t}</span>
@@ -672,22 +652,22 @@
                 }).join('');
 
                 movieCard.innerHTML = `
-                    <div class="flex gap-3.5 items-start">
-                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${m.color} border border-white/10 flex items-center justify-center shrink-0 text-pink-400">
-                            <i class="fa-solid ${m.icon} text-xl"></i>
+                    <div class="flex gap-3 items-start">
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br ${m.color} border border-white/10 flex items-center justify-center shrink-0 text-rose-400">
+                            <i class="fa-solid ${m.icon} text-lg"></i>
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 flex-wrap">
-                                <h3 class="font-bold text-white text-base truncate">${m.title}</h3>
-                                <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-500/20 text-pink-300 font-semibold border border-pink-500/30">${m.format}</span>
+                                <h3 class="font-bold text-white text-sm sm:text-base truncate">${m.title}</h3>
+                                <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-semibold border border-rose-500/30">${m.format}</span>
                                 <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-800 text-gray-400">${m.rating}</span>
                             </div>
-                            <p class="text-[11px] text-pink-400/80 mt-0.5">${m.genre}</p>
-                            <p class="text-xs text-gray-300 mt-2 font-light leading-relaxed">${m.desc}</p>
+                            <p class="text-[11px] text-rose-400/90 mt-0.5">${m.genre}</p>
+                            <p class="text-xs text-gray-300 mt-1.5 font-light leading-relaxed">${m.desc}</p>
                             
-                            <div class="mt-3.5 pt-3 border-t border-white/5 flex items-center justify-between flex-wrap gap-2">
-                                <span class="text-[11px] text-gray-400 font-medium">Выберите время:</span>
-                                <div class="flex gap-2 flex-wrap">
+                            <div class="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between flex-wrap gap-2">
+                                <span class="text-[11px] text-gray-400 font-medium">Сеанс:</span>
+                                <div class="flex gap-1.5 flex-wrap">
                                     ${timeButtonsHTML}
                                 </div>
                             </div>
@@ -703,8 +683,7 @@
             const movie = moviesData.find(m => m.id === movieId);
             booking.movie = movie;
             booking.time = timeStr;
-
-            renderMovies(); // Re-render to highlight active time button & card
+            renderMovies();
         }
 
         function validateStep3() {
@@ -715,20 +694,19 @@
             nextStep();
         }
 
-        // STEP 4 logic: Render snacks and drinks
         function renderFoodAndDrinks() {
             const snacksGrid = document.getElementById('snacks-grid');
             const drinksGrid = document.getElementById('drinks-grid');
 
             snacksGrid.innerHTML = snacksList.map(item => `
-                <div onclick="toggleFoodItem('snacks', '${item.name}', this)" class="glass-card p-3 rounded-xl cursor-pointer text-xs font-medium text-gray-300 hover:text-white flex items-center justify-between transition-all">
+                <div onclick="toggleFoodItem('snacks', '${item.name}', this)" class="glass-card p-2.5 rounded-xl cursor-pointer text-xs font-medium text-gray-300 hover:text-white flex items-center justify-between transition-all">
                     <span>${item.name}</span>
-                    <i class="fa-solid fa-check text-pink-400 text-xs opacity-0 check-icon"></i>
+                    <i class="fa-solid fa-check text-rose-400 text-xs opacity-0 check-icon"></i>
                 </div>
             `).join('');
 
             drinksGrid.innerHTML = drinksList.map(item => `
-                <div onclick="toggleFoodItem('drinks', '${item.name}', this)" class="glass-card p-3 rounded-xl cursor-pointer text-xs font-medium text-gray-300 hover:text-white flex items-center justify-between transition-all">
+                <div onclick="toggleFoodItem('drinks', '${item.name}', this)" class="glass-card p-2.5 rounded-xl cursor-pointer text-xs font-medium text-gray-300 hover:text-white flex items-center justify-between transition-all">
                     <span>${item.name}</span>
                     <i class="fa-solid fa-check text-purple-400 text-xs opacity-0 check-icon"></i>
                 </div>
@@ -750,7 +728,6 @@
             }
         }
 
-        // STEP 5: Render Ticket Summary
         function renderSummary() {
             document.getElementById('summary-movie').innerText = booking.movie ? booking.movie.title : 'Не выбран';
             document.getElementById('summary-format').innerText = booking.movie ? booking.movie.format : '2D';
@@ -771,7 +748,6 @@
             }
         }
 
-        // Formulate output string for Telegram
         function buildTelegramText() {
             const dayStr = booking.dayObj ? `${booking.dayObj.dayName} (${booking.dayObj.dateStr})` : '';
             const movieStr = booking.movie ? booking.movie.title : '';
@@ -787,7 +763,15 @@
 
         function sendTelegram() {
             const text = encodeURIComponent(buildTelegramText());
-            window.open(`https://t.me/share/url?url=&text=${text}`, '_blank');
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Відкриває напряму додаток Telegram на мобільному
+                window.location.href = `tg://msg?text=${text}`;
+            } else {
+                // На десктопі відкриває web-версію/подію у новому вікні
+                window.open(`https://t.me/share/url?url=&text=${text}`, '_blank');
+            }
         }
     </script>
 </body>
